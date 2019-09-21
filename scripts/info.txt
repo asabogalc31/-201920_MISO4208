@@ -1,1 +1,1 @@
-
+Scripts de prestashop para las pruebas de la solución a desarrollar
