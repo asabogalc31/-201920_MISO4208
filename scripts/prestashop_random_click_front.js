@@ -2,7 +2,7 @@ describe('Prestashop under monkeys', function() {
     it('visits prestashop and survives monkeys', function() {
         cy.visit('https://localhost/prestashop');
         cy.wait(1000);
-        randomClick(10);
+        randomClick(1000);
     })
 })
 
