@@ -2,11 +2,43 @@ module.exports = function() {
     /**
      * Checkout for shopping cart products
      */
-    function checkoutCart(){        
+    function checkoutCart(item, delItems){
+        
+        //Assert
+        
+        cy.get('.cart-items').find('.cart-item').then(($cartItems) => {
+            //for(var qp = 0; qp < item; qp++){
+                console.log($cartItems.get());
+                //cy.get(cartItems[qp])
+            //}
+            //cy.get('.current-price').find('span').invoke('text')
+            //console.log(cartItems.text());
+            cy.get('.current-price span').invoke('text').then((text1) => {
+                // do more work here
+                //console.log(text1.replace(' $',''));
+                // grab the div again and compare its previous text
+                // to the current text
+                cy.get('.cart-overview .current-price span').invoke('text').should((text2) => {
+                  expect(text1).eq(text2)
+                })
+              })
+            //}
+        })
+
         cy.get('.cart-summary')
         .find('.text-sm-center')
         .find('a')
         .click();
+    }
+
+    /**
+     * Delte Im
+     */
+    function deleteCart(){
+        cy.get('.cart-items').find('a.remove-from-cart').click({multiple: true});
+
+        //Assert
+        cy.get('.cart-overview').find('span').should('contain', 'No hay más artículos en su carrito');
     }
 
     /**
@@ -33,10 +65,29 @@ module.exports = function() {
     function personalForm(personalInfo) {
         cy.wait(2000);
         const formId = "#customer-form";
+
         cy.get(formId).find('input[name="firstname"]').click().type(personalInfo.name);
         cy.get(formId).find('input[name="lastname"]').click().type(personalInfo.lastaName);
         cy.get(formId).find('input[name="email"]').click().type(personalInfo.email);
-        cy.get(formId).find('input[name="password"]').click().type(personalInfo.password);
+        
+        //Crear cliente
+        if(personalInfo.password != ''){
+            cy.get(formId).find('input[name="password"]').click().type(personalInfo.password);
+            cy.get(formId).find('input[name="birthday"]').click().type(personalInfo.birthday);
+        }
+        
+        if(personalInfo.optin == true){
+            cy.get(formId).find('input[name="optin"]').click()
+        }
+        
+        if(personalInfo.newsletter == true){
+            cy.get(formId).find('input[name="newsletter"]').click()
+        }
+        
+        if(personalInfo.psgdpr == true){
+            cy.get(formId).find('input[name="psgdpr"]').click()
+        }
+        
         cy.get(formId).find('button.continue').click();
     }
     
@@ -89,6 +140,7 @@ module.exports = function() {
 
     return {
         checkoutCart: checkoutCart,
-        fillForm: fillForm
+        fillForm: fillForm,
+        deleteCart: deleteCart
     };
 }

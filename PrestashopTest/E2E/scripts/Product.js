@@ -7,7 +7,7 @@ module.exports = function() {
             // Generate a random index of elements
             var txtTotalProducts = $listItem.text().match(/\s\d{1}\s/).toString().trim();
             var randomNumber = Math.floor(Math.random() * txtTotalProducts);
-
+            
             // Item is selected
             cy.get('#js-product-list')
             .find('.row')
@@ -20,8 +20,13 @@ module.exports = function() {
     /**
      * Adds product to cart
      */
-    function addProductToCart(){
-        // TODO: Select product features quantity and size
+    function addProductToCart(qtt){
+        // TODO: Select product features quantity
+        cy.get('#add-to-cart-or-refresh')
+        .find('.product-quantity')
+        .find('#quantity_wanted')
+        .clear().type(qtt);
+
         cy.get('#add-to-cart-or-refresh')
         .find('.product-add-to-cart')
         .find('.product-quantity')
