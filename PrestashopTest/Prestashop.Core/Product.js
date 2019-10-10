@@ -18,22 +18,31 @@ module.exports = function() {
     }
     
     /**
-     * Adds product to cart
+     * Add the quantity of items of the products to the shopping cart.
+     * @param {int} amountItems The amount of items of the products 
      */
-    function addProductToCart(qtt){
-        // TODO: Select product features quantity
+    function addProductToCart(amountItems){
+        // Select product features quantity
         cy.get('#add-to-cart-or-refresh')
         .find('.product-quantity')
         .find('#quantity_wanted')
-        .clear().type(qtt);
+        .clear().type(amountItems);
 
+        // Adds product to shopping cart
         cy.get('#add-to-cart-or-refresh')
         .find('.product-add-to-cart')
         .find('.product-quantity')
         .find('.add')
-        .click();
-
-        cy.wait(2000);        
+        .then(($button) => {
+           /* if ($button.is(':disabled')){
+                console.log('Botón no es visible--- pop up')
+                cy.get('textarea[class="product-message"]').type("Text of tests");
+                cy.get('button[name="submitCustomizedData"]').click();  
+            }*/
+            
+            cy.get($button).click();
+            cy.wait(2000); 
+        })
     }
 
     /**
@@ -44,7 +53,12 @@ module.exports = function() {
         // Constants
         const modal = ".modal-content";
         var cartContent = cy.get(modal).find('.cart-content-btn');
-        continueShopping ? cartContent.find('button').click() : cartContent.find('a').click();
+        if (continueShopping) {
+            cartContent.find('button[class="btn btn-secondary"]').click();
+            return;
+        }
+
+        cartContent.find('a[class="btn btn-primary"]').click()
     }
     
     return {

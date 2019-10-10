@@ -1,17 +1,16 @@
-const core = require('../../scripts/Core')()
-const product = require('../../scripts/Product')()
-const cart = require('../../scripts/Cart')()
+/**
+ * Import scripts
+ */
+const core = require('../../../Prestashop.Core/Core')()
+const product = require('../../../Prestashop.Core/Product')()
+const cart = require('../../../Prestashop.Core/Cart')()
 
-//Cantidad items del mismo producto
-const prodqtt = 1;
+// Amount of items per product
+const amountItems = 2;
 
-//Cantidad de productos
-const numProd = 2;
+const amountProducts = 3;
 
-//Eliminar Productos del carrito
-const delPro = true;
-
-const prestaMenu = {
+const menuAccess = {
     pMenu : 'Accesorios',
     pSubm : 'Home Accessories'
 }
@@ -19,15 +18,14 @@ const prestaMenu = {
 //Información Usuario del carrito
 const cartInfo = {
     personalInfo: {
-        gender:'1',
+        gender:'2',
         name: 'Michael',
-        lastaName: 'Fenix',
-        email: 'mfenixco@coalition.net',
-        password: '',
-        birthday: '',
-        optin: false,
-        newsletter: false,
-        psgdpr: false
+        lastName: 'Fenix',
+        email: 'mfenixcp@coalition.net',
+        password: 'Prueba1234',
+        birthday: '31/05/1985',
+        option: false,
+        newsletter: false
     },
     addressInfo:{
         address:'Fake street 123',
@@ -45,23 +43,21 @@ context('As an user I want to buy an item on the prestashop site', function() {
     })
     
     describe('Shopping cart', function() {
-        it('Guest user, visits prestashop and buys an item successfully', function() {               
+        it.skip('Guest user visits prestashop, creates an account and buys an item successfully', function() {               
             // Selects a menu option
-            //let menu = prestaMenu.pMenu;
-            //let subMenu = 'Home Accessories';
-            core.selectMenu(prestaMenu.pMenu, prestaMenu.pSubm);
+            core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
             
             // Assert page title
-            (prestaMenu.pSubm == "" && prestaMenu.pSubm == null) ? 
-                cy.get('.block-category').find('h1').should('contain', prestaMenu.pMenu):
-                cy.get('.block-category').find('h1').should('contain', prestaMenu.pSubm);
+            (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
 
             // Select a random product
             product.selectRandomProduct();
-            product.addProductToCart(prodqtt);
+            product.addProductToCart(amountItems);
             
             // Assert modal header
-            cy.wait(5000);
+            cy.wait(2000);
             cy.get(".modal-content")
                 .find('.modal-header')
                 .find('h4')
@@ -70,28 +66,28 @@ context('As an user I want to buy an item on the prestashop site', function() {
             product.selectModalOption(false);
 
             // Checkout cart
-            cart.checkoutCart(numProd, delPro);
-            cart.fillForm(cartInfo);
+            cart.checkoutCart(amountItems);
+            cart.fillForm(cartInfo, true);
             
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
-        it('User visits prestashop, create account and buys an item successfully', function() {
+        it.skip('User registered visits prestashop and buys an item successfully', function() {
             // Selects a menu option
-            core.selectMenu(prestaMenu.pMenu, prestaMenu.pSubm);
+            core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
             
             // Assert page title
-            (prestaMenu.pSubm == "" && prestaMenu.pSubm == null) ? 
-                cy.get('.block-category').find('h1').should('contain', prestaMenu.pMenu):
-                cy.get('.block-category').find('h1').should('contain', prestaMenu.pSubm);
+            (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
 
             // Select a random product
             product.selectRandomProduct();
-            product.addProductToCart(prodqtt);
+            product.addProductToCart(amountItems);
             
             // Assert modal header
-            cy.wait(5000);
+            cy.wait(2000);
             cy.get(".modal-content")
                 .find('.modal-header')
                 .find('h4')
@@ -100,117 +96,128 @@ context('As an user I want to buy an item on the prestashop site', function() {
             product.selectModalOption(false);
 
             // Checkout cart
-            cart.checkoutCart(numProd, delPro);
-            cart.fillForm(cartInfo);
+            cart.checkoutCart(amountItems);
+            cart.fillForm(cartInfo, false);
             
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
-        it('Guest user, visits prestashop and buys various items successfully', function() {
-            //Multipres productos y cantidad de productos
-            for(var qp = 0; qp < numProd; qp++){
-                cy.get('#top-menu')
-				.find('a')
-				.contains(prestaMenu.pSubm)
-				.trigger('show', {force:true})
-				.click({force:true});
-            
+        it('Guest user visits prestashop, creates an account and buys various items successfully', function() {
+            for(var p = 0; p < amountProducts; p++){
+                // Selects a menu option
+                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+
                 // Assert page title
-                (prestaMenu.pSubm == "" && prestaMenu.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', prestaMenu.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', prestaMenu.pSubm);
+                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
-                product.addProductToCart(prodqtt);
+                product.addProductToCart(amountItems);
+
+                // Assert modal header
+                cy.wait(2000);
+                cy.get(".modal-content")
+                    .find('.modal-header')
+                    .find('h4')
+                    .should('contain', 'Producto añadido correctamente a su carrito de compra');
+
+                // Continues shopping
+                if (p != (amountProducts -1)) {
+                    product.selectModalOption(true);
+                }
+                else if (p == (amountProducts -1)) {
+                    product.selectModalOption(false);
+                }
             }
             
-            // Assert modal header
-            cy.wait(5000);
-            cy.get(".modal-content")
-                .find('.modal-header')
-                .find('h4')
-                .should('contain', 'Producto añadido correctamente a su carrito de compra');
-            // Continues shopping
-            product.selectModalOption(false);
-
             // Checkout cart
-            cart.checkoutCart(numProd, delPro);
-            cart.fillForm(cartInfo);
+            cart.checkoutCart(amountItems);
+            //cart.fillForm(cartInfo, true);
+
+            // Assert confirmed order
+            //cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
+        }),
+
+        it.skip('User registered visits prestashop and buys various items successfully', function() {
+            for(var p = 0; p < amountProducts; p++){
+                // Selects a menu option
+                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+
+                // Assert page title
+                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+
+                // Select a random product
+                product.selectRandomProduct();
+                product.addProductToCart(amountItems);
+
+                // Assert modal header
+                cy.wait(2000);
+                cy.get(".modal-content")
+                    .find('.modal-header')
+                    .find('h4')
+                    .should('contain', 'Producto añadido correctamente a su carrito de compra');
+
+                // Continues shopping
+                if (p != (amountProducts -1)) {
+                    product.selectModalOption(true);
+                }
+                else if (p == (amountProducts -1)) {
+                    product.selectModalOption(false);
+                }
+            }
             
+            // Checkout cart
+            cart.checkoutCart(amountItems);
+            cart.fillForm(cartInfo, false);
+
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
-        it('User visits prestashop, create account and buys various items successfully', function() {
-            //Multipres productos y cantidad de productos
-            for(var qp = 0; qp < numProd; qp++){
-                cy.get('#top-menu')
-				.find('a')
-				.contains(prestaMenu.pSubm)
-				.trigger('show', {force:true})
-				.click({force:true});
-            
+        it.skip('User visits prestashop add items to the cart and delete them', function() {
+            for(var p = 0; p < amountProducts; p++){
+                // Selects a menu option
+                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+
                 // Assert page title
-                (prestaMenu.pSubm == "" && prestaMenu.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', prestaMenu.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', prestaMenu.pSubm);
+                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
-                product.addProductToCart(prodqtt);
+                product.addProductToCart(amountItems);
+
+                // Assert modal header
+                cy.wait(2000);
+                cy.get(".modal-content")
+                    .find('.modal-header')
+                    .find('h4')
+                    .should('contain', 'Producto añadido correctamente a su carrito de compra');
+
+                // Continues shopping
+                if (p != (amountProducts -1)) {
+                    product.selectModalOption(true);
+                }
+                else if (p == (amountProducts -1)) {
+                    product.selectModalOption(false);
+                }
             }
-            
-            // Assert modal header
-            cy.wait(5000);
-            cy.get(".modal-content")
-                .find('.modal-header')
-                .find('h4')
-                .should('contain', 'Producto añadido correctamente a su carrito de compra');
-            // Continues shopping
-            product.selectModalOption(false);
 
             // Checkout cart
-            cart.checkoutCart(numProd, delPro);
-            cart.fillForm(cartInfo);
-            
-            // Assert confirmed order
-            cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
-        }),
-
-        it('User visits prestashop add items to the cart and delete them', function() {
-             //Multipres productos y cantidad de productos
-             for(var qp = 0; qp < numProd; qp++){
-                cy.get('#top-menu')
-				.find('a')
-				.contains(prestaMenu.pSubm)
-				.trigger('show', {force:true})
-				.click({force:true});
-            
-                // Assert page title
-                (prestaMenu.pSubm == "" && prestaMenu.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', prestaMenu.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', prestaMenu.pSubm);
-
-                // Select a random product
-                product.selectRandomProduct();
-                product.addProductToCart(prodqtt);
-            }
-            
-            // Assert modal header
-            cy.wait(5000);
-            cy.get(".modal-content")
-                .find('.modal-header')
-                .find('h4')
-                .should('contain', 'Producto añadido correctamente a su carrito de compra');
-            // Continues shopping
-            product.selectModalOption(false);
-
-            // Checkout cart
-            cart.checkoutCart();
-            cart.deleteCart();
-
+            cart.removeProduct();
+            cy.wait(2000); 
+            cy.get(".cart-overview")
+            .find('span[class="no-items"]')
+            .invoke('text')
+            .should(($message) => {
+                expect($message).to.contain('No hay más artículos en su carrito');
+            });
         })
     })
 })
