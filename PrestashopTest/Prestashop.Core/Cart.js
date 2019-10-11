@@ -3,39 +3,52 @@ const core = require('./Core')()
 module.exports = function() {
     /**
      * Checkout for shopping cart products
-     * @param {int} amountItems The amount of items selected per product to add to the shopping cart
      */
-    function checkoutCart(amountItems){
-        var totalExpected = 0;
-        var currentMatch;
-        var totalShopping = 0;
-        var cartSummaryElement = ".cart-summary";
+    function checkoutCart(){
+        var cartSummaryElement = ".cart-summary";  
+        var expectedTotalShoppingCart = new Array();
 
-        cy.get('.cart-items').find('.cart-item').then(($cartItems) => {
-            // Get the expected total per product
-            cy.get('.current-price span').then(($unitValue) => {
-                console.log($unitValue.length);
-                var expectedMatch = core.getMatchWithPattern(/\d+\,\d+/, $unitValue.text()).replace(",", ".");
-                totalExpected += parseFloat(expectedMatch) * parseFloat(amountItems);
-            })
+        cy.get('.cart-items').find('.cart-item').then(($cartItems) => { 
+            var expectedTotalPerProduct;
 
-            // Validate the expected total with the current total per product
-            cy.get('span.product-price').invoke('text').should(($currentTotal) => {
-                currentMatch = core.getMatchWithPattern(/\d+\,\d+/, $currentTotal).replace(",", ".");
-                expect(totalExpected).equal(parseFloat(currentMatch));
-                return (totalShopping += parseFloat(currentMatch));
-            })
-        }).then(($currentFinalTotal)=>{
-            // Validate the total of the shopping cart
-            cy.get(cartSummaryElement)
-            .find('div.cart-summary-line.cart-total')
-            .find('span.value')
-            .invoke('text')
-            .should(($total) => {
-                var totalMatch = core.getMatchWithPattern(/\d+\,\d+/, $total).replace(",", ".");
-                var actualTotal = core.getMatchWithPattern(/\d+\,\d+/, $currentFinalTotal).replace(",", ".");
-                expect(parseFloat(totalMatch)).equal(parseFloat(actualTotal));
+            for (let index = 0; index < $cartItems.length; index++) {            
+
+                // Get the amount of items of the product
+                var unitValue;
+                var amountItems;
+                var totalSite;
+                cy.get($cartItems).find('input[name="product-quantity-spin"]').eq(index).invoke('val').then(($value)=>{
+                    amountItems = $value;
+                });
+
+                cy.get($cartItems)
+                .eq(index)
+                .should(($product) => {
+                    // Get the unit value of the total price of the product
+                    unitValue = core.getMatchWithPattern(/\d+\,\d+/, $product.find('span.price').text()).replace(",", ".");
+
+                    // Get the value of the total price of the product
+                    totalSite = core.getMatchWithPattern(/\d+\,\d+/, $product.find('span.product-price').text()).replace(",", ".");
+
+                    // Calcs the total price per product
+                    expectedTotalPerProduct = Math.round(parseFloat(unitValue) * parseInt(amountItems)* 100) /100;
+                    expect(expectedTotalPerProduct).to.equal(parseFloat(totalSite));
+
+                    // Add expected total per product to array
+                    expectedTotalShoppingCart.push(parseFloat(expectedTotalPerProduct));
+                });
+            }
+        });
+
+        // Validate the total of the shopping cart
+        cy.get('div.cart-summary-line.cart-total').find('span.value').should(($total) => {                
+            var totalExpected = 0;
+            expectedTotalShoppingCart.forEach(totalPerProduct => {
+                totalExpected += totalPerProduct;
             });
+
+            var totalSite= Math.round(core.getMatchWithPattern(/\d+\,\d+/, $total.text()).replace(",", ".") * 100) /100;
+            expect(totalExpected).to.equal(parseFloat(totalSite));
         })
 
         // Does click on checkout cart button

@@ -24,25 +24,37 @@ module.exports = function() {
     function addProductToCart(amountItems){
         // Select product features quantity
         cy.get('#add-to-cart-or-refresh')
-        .find('.product-quantity')
+        .find('.product-quantity').as('qProduct')        
+        
+        cy.get('@qProduct')
         .find('#quantity_wanted')
-        .clear().type(amountItems);
+        .clear()
+        .type(amountItems);
+
+        if (amountItems === 0) {
+            cy.get('@qProduct').find('#quantity_wanted').invoke('val').should(($value) => {  
+                expect(1).to.equal(parseInt($value));
+            })
+            return;
+        }
 
         // Adds product to shopping cart
-        cy.get('#add-to-cart-or-refresh')
-        .find('.product-add-to-cart')
-        .find('.product-quantity')
-        .find('.add')
-        .then(($button) => {
-           /* if ($button.is(':disabled')){
-                console.log('Botón no es visible--- pop up')
-                cy.get('textarea[class="product-message"]').type("Text of tests");
-                cy.get('button[name="submitCustomizedData"]').click();  
-            }*/
-            
-            cy.get($button).click();
-            cy.wait(2000); 
-        })
+        var children = cy.get('.product-information').children().its('length').then(numberElements =>{
+            if(numberElements === 5){                
+                cy.get('.product-customization')
+                .find('form').as('popUp');
+                cy.get('@popUp').find('textarea[class="product-message"]').type("Text of tests");
+                cy.get('@popUp').find('button[name="submitCustomizedData"]').click();
+            }
+    
+            cy.get('#add-to-cart-or-refresh')
+            .find('.product-add-to-cart')
+            .find('.product-quantity')
+            .find('.add')
+            .then(($button) => {                
+                cy.get($button).click();
+            })
+        });        
     }
 
     /**

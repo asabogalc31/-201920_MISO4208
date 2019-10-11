@@ -21,7 +21,7 @@ const cartInfo = {
         gender:'2',
         name: 'Michael',
         lastName: 'Fenix',
-        email: 'mfenixcp@coalition.net',
+        email: 'mfenixcu@coalition.net',
         password: 'Prueba1234',
         birthday: '31/05/1985',
         option: false,
@@ -43,7 +43,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
     })
     
     describe('Shopping cart', function() {
-        it.skip('Guest user visits prestashop, creates an account and buys an item successfully', function() {               
+        it('Guest user visits prestashop, creates an account and buys an item successfully', function() {               
             // Selects a menu option
             core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
             
@@ -73,7 +73,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
-        it.skip('User registered visits prestashop and buys an item successfully', function() {
+        it('User registered visits prestashop and buys an item successfully', function() {
             // Selects a menu option
             core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
             
@@ -134,14 +134,14 @@ context('As an user I want to buy an item on the prestashop site', function() {
             }
             
             // Checkout cart
-            cart.checkoutCart(amountItems);
-            //cart.fillForm(cartInfo, true);
+            cart.checkoutCart();
+            cart.fillForm(cartInfo, true);
 
             // Assert confirmed order
-            //cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
+            cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
-        it.skip('User registered visits prestashop and buys various items successfully', function() {
+        it('User registered visits prestashop and buys various items successfully', function() {
             for(var p = 0; p < amountProducts; p++){
                 // Selects a menu option
                 core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
@@ -179,7 +179,81 @@ context('As an user I want to buy an item on the prestashop site', function() {
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
-        it.skip('User visits prestashop add items to the cart and delete them', function() {
+        it('User visits prestashop and adds zero items to the shopping cart', function() {
+            for(var p = 0; p < amountProducts; p++){
+                // Selects a menu option
+                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+
+                // Assert page title
+                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+
+                // Select a random product
+                product.selectRandomProduct();
+                product.addProductToCart(0);
+            }
+        })
+
+        it('User visits prestashop and adds the limit of items allowed per product to the shopping cart', function() {
+            for(var p = 0; p < amountProducts; p++){
+                // Selects a menu option
+                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+
+                // Assert page title
+                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+
+                // Select a random product
+                product.selectRandomProduct();
+                cy.get('#add-to-cart-or-refresh')
+                .find('.product-quantity').as('qProduct')        
+                
+                cy.get('@qProduct')
+                .find('#quantity_wanted')
+                .clear()
+                .type(3000);
+
+                // Assert
+                cy.wait(2000);
+                cy.get('div.product-add-to-cart')
+                .find('#product-availability')
+                .invoke('text')
+                .should('contain','No hay suficientes productos en stock');
+            }
+        })
+
+        it('User visits prestashop and exceeds the limit of items allowed per product to the shopping cart', function() {
+            for(var p = 0; p < amountProducts; p++){
+                // Selects a menu option
+                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+
+                // Assert page title
+                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+
+                // Select a random product
+                product.selectRandomProduct();
+                cy.get('#add-to-cart-or-refresh')
+                .find('.product-quantity').as('qProduct')        
+                
+                cy.get('@qProduct')
+                .find('#quantity_wanted')
+                .clear()
+                .type(99999999);
+
+                // Assert
+                cy.wait(2000);
+                cy.get('div.product-add-to-cart')
+                .find('#product-availability')
+                .invoke('text')
+                .should('contain','No hay suficientes productos en stock');
+            }
+        })
+
+        it('User visits prestashop add items to the cart and delete them', function() {
             for(var p = 0; p < amountProducts; p++){
                 // Selects a menu option
                 core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
