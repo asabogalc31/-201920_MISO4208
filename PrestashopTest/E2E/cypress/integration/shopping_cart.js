@@ -5,6 +5,8 @@ const core = require('../../../Prestashop.Core/Core')()
 const product = require('../../../Prestashop.Core/Product')()
 const cart = require('../../../Prestashop.Core/Cart')()
 
+const urlClient = 'http://172.24.41.140/PrestaShop/es/'
+
 // Amount of items per product
 const amountItems = 2;
 
@@ -60,11 +62,11 @@ const cartInfo2 = {
 
 context('As an user I want to buy an item on the prestashop site', function() {
 	beforeEach(function() {
-		core.openSite();
+		core.openSite(urlClient);
     })
     
     describe('Shopping cart - Guest user visits prestashop', function() {
-        it.skip('Creates an account and buys an item successfully', function() {               
+        it('Creates an account and buys an item successfully', function() {               
             // Selects a menu option
             core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
             
@@ -94,7 +96,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
        
-        it.skip('Creates an account and buys various items successfully', function() {
+        it('Creates an account and buys various items successfully', function() {
             for(var p = 0; p < amountProducts; p++){
                 // Selects a menu option
                 core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
@@ -134,7 +136,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
     })
 
     describe('Shopping cart - User registered visits prestashop', function() {
-        it.skip('Buys an item successfully', function() {
+        it('Buys an item successfully', function() {
             // Selects a menu option
             core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
             
@@ -164,7 +166,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
         
-        it.skip('Buys various items successfully', function() {
+        it('Buys various items successfully', function() {
             for(var p = 0; p < amountProducts; p++){
                 // Selects a menu option
                 core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
@@ -202,7 +204,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
-        it.skip('Adds zero items to the shopping cart', function() {
+        it('Adds zero items to the shopping cart', function() {
             for(var p = 0; p < amountProducts; p++){
                 // Selects a menu option
                 core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
@@ -256,7 +258,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             }
         })
 
-        it.skip('Exceeds the limit of items allowed per product to the shopping cart', function() {
+        it('Exceeds the limit of items allowed per product to the shopping cart', function() {
             for(var p = 0; p < amountProducts; p++){
                 // Selects a menu option
                 core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
@@ -294,7 +296,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             }
         })
 
-        it.skip('Add items to the cart and delete them', function() {
+        it('Add items to the cart and delete them', function() {
             for(var p = 0; p < amountProducts; p++){
                 // Selects a menu option
                 core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);

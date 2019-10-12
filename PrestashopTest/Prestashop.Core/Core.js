@@ -2,8 +2,8 @@ module.exports = function() {
 	/**
 	 * Open the browser with the prestashop url
 	 */
-	function openSite(){
-		cy.visit('http://172.24.41.140/PrestaShop/es/')
+	function openSite(url){
+		cy.visit(url)
 	}
 
 	/**
