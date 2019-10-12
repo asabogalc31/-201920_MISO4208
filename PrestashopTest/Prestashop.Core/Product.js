@@ -31,6 +31,7 @@ module.exports = function() {
         .clear()
         .type(amountItems);
 
+        cy.wait(2000);
         if (amountItems === 0) {
             cy.get('@qProduct').find('#quantity_wanted').invoke('val').should(($value) => {  
                 expect(1).to.equal(parseInt($value));

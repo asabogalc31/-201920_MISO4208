@@ -47,6 +47,7 @@ module.exports = function() {
                 totalExpected += totalPerProduct;
             });
 
+            totalExpected = Math.round(totalExpected * 100) / 100;
             var totalSite= Math.round(core.getMatchWithPattern(/\d+\,\d+/, $total.text()).replace(",", ".") * 100) /100;
             expect(totalExpected).to.equal(parseFloat(totalSite));
         })
