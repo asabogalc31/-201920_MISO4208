@@ -1,0 +1,50 @@
+query("save")
+query("discard")
+query("DISCARD")
+query("save")
+query("SAVE")
+query("*")
+query("reminder")
+query("Creae habit")
+query("Create habit")
+query("name")
+query("tvName")
+query("reminder")
+query("*")
+query("NoResourceEntry-3")
+query("NoResourceEntry-3")
+start_test_server_in_background
+query("NoResourceEntry-3")
+query("NoResourceEntry-3")
+start_test_server_in_background
+query("*")
+query("NoResourceEntry-3")
+start_test_server_in_background
+query("*")
+query("*")
+exit
+start_test_server_in_background
+query("*")
+query("count")
+query("*")
+query("Create habit")
+query("Target")
+start_test_server_in_background
+query("Create habit")
+query("Create habit")
+query("*")
+start_test_server_in_background
+query("*")
+query("*")
+exit
+exit
+start_test_server_in_background
+query("tvUnit")
+query("tvName")
+enter_text("org.isoron.uhabits.activities.habits.edit.views.ExampleEditText id:'tvUnit", "test") 
+query("tvName")
+Then I enter "Steps" into input unit
+exit
+start_test_server_in_background
+query("*")
+exit

@@ -1,0 +1,50 @@
+touch(query("android.widget.Spinner * marked:'ASSET'"))
+touch(query("android.widget.Spinner * marked:'ASSET'"))
+touch(query("android.widget.Spinner * marked:'BANK'"))
+touch (query("android.widget.Spinner marked:'input_account_type_spinner'"))
+touch (query("android.widget.Spinner marked:'input_account_type_spinner'"))
+touch(query("android.widget.Spinner * marked:'BANK'"))
+touch(query("android.widget.Spinner * marked:'BANK'"))
+touch(query("android.widget.Spinner * marked:'BANK'"))
+touch(query("android.widget.Spinner * marked:'BANK'"))
+  tap_when_element_exists("android.widget.PopupWindow$PopupViewContainer * marked:'BANK'")
+touch(query("android.widget.PopupWindow$PopupViewContainer * marked:'BANK'"))
+touch(query("android.widget.PopupWindow$PopupViewContainer * marked:'BANK'"))
+touch(query("android.widget.Spinner * marked:'BANK'"))
+touch (query("android.widget.Spinner marked:'input_account_type_spinner'"))
+touch (query("android.widget.Spinner marked:'input_account_type_spinner'"))
+touch (query("android.widget.Spinner marked:'input_account_type_spinner'"))
+touch (query("android.widget.Spinner marked:'input_account_type_spinner'"))
+touch (query("android.widget.Spinner marked:'input_account_type_spinner'"))
+exit
+touch(query("android.widget.Spinner * marked:'BANK'"))
+start_test_server_in_background
+query(*)
+query("*")
+query("*")
+exit
+start_test_server_in_background
+query("android.support.v7.widget.AppCompatTextView")
+eixt
+exit
+start_test_server_in_background
+query("*")
+query("*")
+exit
+start_test_server_in_background
+query("*")
+query("*")
+exit
+start_test_server_in_background
+query("*")
+exit
+start_test_server_in_background
+query("*")
+exit
+start_test_server_in_background
+query("*")
+exit
+start_test_server_in_background
+query("*")
+query("*")
+exit
