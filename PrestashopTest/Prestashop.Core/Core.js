@@ -38,11 +38,24 @@ module.exports = function() {
 	 */
     function getMatchWithPattern(pattern, text) {
         return text.match(pattern).toString();
-    }
+	}
+
+	/**
+	 * Log in on prestashop site like an admin user
+	 * @param {*} user The email of the user admin 
+	 * @param {*} password The password
+	 */
+	function LogInAsAdminUser(user, password){
+		cy.get('#login_form').find('#email').click().type(user);
+		cy.get('#login_form').find('#passwd').click().type(password);
+
+		cy.get('#login_form').find('#submit_login').click();
+	}
 
     return {
         openSite: openSite,
 		selectMenu: selectMenu,
-		getMatchWithPattern: getMatchWithPattern
+		getMatchWithPattern: getMatchWithPattern,
+		LogInAsAdminUser: LogInAsAdminUser
     };
 }

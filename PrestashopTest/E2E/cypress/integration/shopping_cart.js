@@ -5,79 +5,26 @@ const core = require('../../../Prestashop.Core/Core')()
 const product = require('../../../Prestashop.Core/Product')()
 const cart = require('../../../Prestashop.Core/Cart')()
 
-const urlClient = 'http://172.24.41.140/PrestaShop/es/'
-
-// Amount of items per product
-const amountItems = 2;
-
-const amountProducts = 6;
-
-const menuAccess = {
-    pMenu : 'Accesorios',
-    pSubm : 'Home Accessories'
-}
-
-//Información Usuario del carrito
-const cartInfo = {
-    personalInfo: {
-        gender:'2',
-        name: 'Michael',
-        lastName: 'Fenix',
-        email: 'mfenixdg@coalition.net',
-        password: 'Prueba1234',
-        birthday: '31/05/1985',
-        option: false,
-        newsletter: false
-    },
-    addressInfo:{
-        address:'Fake street 123',
-        complementaryAddress:'',
-        postCode:'555718',
-        city:'Bogotá',
-        country:'Colombia',
-        phoneNumber:'3137777777'
-    }
-};
-
-const cartInfo2 = {
-    personalInfo: {
-        gender:'2',
-        name: 'Michael',
-        lastName: 'Fenix',
-        email: 'mfenixdh@coalition.net',
-        password: 'Prueba1234',
-        birthday: '31/05/1985',
-        option: false,
-        newsletter: false
-    },
-    addressInfo:{
-        address:'Fake street 123',
-        complementaryAddress:'',
-        postCode:'555718',
-        city:'Bogotá',
-        country:'Colombia',
-        phoneNumber:'3137777777'
-    }
-};
+import data from '../fixtures/data.json'
 
 context('As an user I want to buy an item on the prestashop site', function() {
 	beforeEach(function() {
-		core.openSite(urlClient);
+		core.openSite(data.url);
     })
     
     describe('Shopping cart - Guest user visits prestashop', function() {
         it('Creates an account and buys an item successfully', function() {               
             // Selects a menu option
-            core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+            core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
             
             // Assert page title
-            (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+            (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
             // Select a random product
             product.selectRandomProduct();
-            product.addProductToCart(amountItems);
+            product.addProductToCart(data.amountItems);
             
             // Assert modal header
             cy.wait(2000);
@@ -89,26 +36,26 @@ context('As an user I want to buy an item on the prestashop site', function() {
             product.selectModalOption(false);
 
             // Checkout cart
-            cart.checkoutCart(amountItems);
-            cart.fillForm(cartInfo, true);
+            cart.checkoutCart(data.amountItems);
+            cart.fillForm(data.products[0], true);
             
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
        
         it('Creates an account and buys various items successfully', function() {
-            for(var p = 0; p < amountProducts; p++){
+            for(var p = 0; p < data.amountProducts; p++){
                 // Selects a menu option
-                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+                core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
 
                 // Assert page title
-                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+                (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
-                product.addProductToCart(amountItems);
+                product.addProductToCart(data.amountItems);
 
                 // Assert modal header
                 cy.wait(2000);
@@ -118,17 +65,17 @@ context('As an user I want to buy an item on the prestashop site', function() {
                     .should('contain', 'Producto añadido correctamente a su carrito de compra');
 
                 // Continues shopping
-                if (p != (amountProducts -1)) {
+                if (p != (data.amountProducts -1)) {
                     product.selectModalOption(true);
                 }
-                else if (p == (amountProducts -1)) {
+                else if (p == (data.amountProducts -1)) {
                     product.selectModalOption(false);
                 }
             }
             
             // Checkout cart
             cart.checkoutCart();
-            cart.fillForm(cartInfo2, true);
+            cart.fillForm(data.products[1], true);
 
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
@@ -138,16 +85,16 @@ context('As an user I want to buy an item on the prestashop site', function() {
     describe('Shopping cart - User registered visits prestashop', function() {
         it('Buys an item successfully', function() {
             // Selects a menu option
-            core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+            core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
             
             // Assert page title
-            (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+            (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
             // Select a random product
             product.selectRandomProduct();
-            product.addProductToCart(amountItems);
+            product.addProductToCart(data.amountItems);
             
             // Assert modal header
             cy.wait(2000);
@@ -159,26 +106,26 @@ context('As an user I want to buy an item on the prestashop site', function() {
             product.selectModalOption(false);
 
             // Checkout cart
-            cart.checkoutCart(amountItems);
-            cart.fillForm(cartInfo, false);
+            cart.checkoutCart(data.amountItems);
+            cart.fillForm(data.products[0], false);
             
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
         
         it('Buys various items successfully', function() {
-            for(var p = 0; p < amountProducts; p++){
+            for(var p = 0; p < data.amountProducts; p++){
                 // Selects a menu option
-                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+                core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
 
                 // Assert page title
-                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+                (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
-                product.addProductToCart(amountItems);
+                product.addProductToCart(data.amountItems);
 
                 // Assert modal header
                 cy.wait(2000);
@@ -188,31 +135,31 @@ context('As an user I want to buy an item on the prestashop site', function() {
                     .should('contain', 'Producto añadido correctamente a su carrito de compra');
 
                 // Continues shopping
-                if (p != (amountProducts -1)) {
+                if (p != (data.amountProducts -1)) {
                     product.selectModalOption(true);
                 }
-                else if (p == (amountProducts -1)) {
+                else if (p == (data.amountProducts -1)) {
                     product.selectModalOption(false);
                 }
             }
             
             // Checkout cart
-            cart.checkoutCart(amountItems);
-            cart.fillForm(cartInfo, false);
+            cart.checkoutCart(data.amountItems);
+            cart.fillForm(data.products[0], false);
 
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
         }),
 
         it('Adds zero items to the shopping cart', function() {
-            for(var p = 0; p < amountProducts; p++){
+            for(var p = 0; p < data.amountProducts; p++){
                 // Selects a menu option
-                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+                core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
 
                 // Assert page title
-                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+                (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
@@ -221,14 +168,14 @@ context('As an user I want to buy an item on the prestashop site', function() {
         })
 
         it('Adds the limit of items allowed per product to the shopping cart', function() {
-            for(var p = 0; p < amountProducts; p++){
+            for(var p = 0; p < data.amountProducts; p++){
                 // Selects a menu option
-                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+                core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
 
                 // Assert page title
-                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+                (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
@@ -259,14 +206,14 @@ context('As an user I want to buy an item on the prestashop site', function() {
         })
 
         it('Exceeds the limit of items allowed per product to the shopping cart', function() {
-            for(var p = 0; p < amountProducts; p++){
+            for(var p = 0; p < data.amountProducts; p++){
                 // Selects a menu option
-                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+                core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
 
                 // Assert page title
-                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+                (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
@@ -297,18 +244,18 @@ context('As an user I want to buy an item on the prestashop site', function() {
         })
 
         it('Add items to the cart and delete them', function() {
-            for(var p = 0; p < amountProducts; p++){
+            for(var p = 0; p < data.amountProducts; p++){
                 // Selects a menu option
-                core.selectMenu(menuAccess.pMenu, menuAccess.pSubm);
+                core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
 
                 // Assert page title
-                (menuAccess.pSubm == "" && menuAccess.pSubm == null) ? 
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pMenu):
-                    cy.get('.block-category').find('h1').should('contain', menuAccess.pSubm);
+                (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+                    cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
                 // Select a random product
                 product.selectRandomProduct();
-                product.addProductToCart(amountItems);
+                product.addProductToCart(data.amountItems);
 
                 // Assert modal header
                 cy.wait(2000);
@@ -318,10 +265,10 @@ context('As an user I want to buy an item on the prestashop site', function() {
                     .should('contain', 'Producto añadido correctamente a su carrito de compra');
 
                 // Continues shopping
-                if (p != (amountProducts -1)) {
+                if (p != (data.amountProducts -1)) {
                     product.selectModalOption(true);
                 }
-                else if (p == (amountProducts -1)) {
+                else if (p == (data.amountProducts -1)) {
                     product.selectModalOption(false);
                 }
             }
