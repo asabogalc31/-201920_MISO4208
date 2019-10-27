@@ -6,14 +6,15 @@ module.exports = function() {
         cy.get('.pagination').find('div').then(($listItem) => {
             // Generate a random index of elements
             var txtTotalProducts = $listItem.text().match(/\s\d{1}\s/).toString().trim();
+            console.log(txtTotalProducts);
             var randomNumber = Math.floor(Math.random() * txtTotalProducts);
             
             // Item is selected
             cy.get('#js-product-list')
-            .find('.row')
-            .children()
-            .eq(randomNumber)
-            .click();
+                .find('.row')
+                .children()
+                .eq(randomNumber)
+                .click();
         })
     }
     
@@ -24,12 +25,12 @@ module.exports = function() {
     function addProductToCart(amountItems){
         // Select product features quantity
         cy.get('#add-to-cart-or-refresh')
-        .find('.product-quantity').as('qProduct')        
+            .find('.product-quantity').as('qProduct')        
         
         cy.get('@qProduct')
-        .find('#quantity_wanted')
-        .clear()
-        .type(amountItems);
+            .find('#quantity_wanted')
+            .clear()
+            .type(amountItems);
 
         cy.wait(2000);
         if (amountItems === 0) {
@@ -43,18 +44,18 @@ module.exports = function() {
         var children = cy.get('.product-information').children().its('length').then(numberElements =>{
             if(numberElements === 5){                
                 cy.get('.product-customization')
-                .find('form').as('popUp');
+                    .find('form').as('popUp');
                 cy.get('@popUp').find('textarea[class="product-message"]').type("Text of tests");
                 cy.get('@popUp').find('button[name="submitCustomizedData"]').click();
             }
     
             cy.get('#add-to-cart-or-refresh')
-            .find('.product-add-to-cart')
-            .find('.product-quantity')
-            .find('.add')
-            .then(($button) => {                
-                cy.get($button).click();
-            })
+                .find('.product-add-to-cart')
+                .find('.product-quantity')
+                .find('.add')
+                .then(($button) => {                
+                    cy.get($button).click();
+                })
         });        
     }
 

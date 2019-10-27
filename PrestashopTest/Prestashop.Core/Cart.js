@@ -174,7 +174,7 @@ module.exports = function() {
         cy.wait(2000);
         const formId = "#checkout-payment-step";
 
-        // TODO: Permitir la slección del tipo de pago a través de parámetro pasado por el usuario
+        // TODO: Permitir la selección del tipo de pago a través de parámetro pasado por el usuario
         cy.get(formId).find('#payment-option-2').click()
         cy.get(formId).find('input[name="conditions_to_approve[terms-and-conditions]"]').click()
         cy.get(formId).find('#payment-confirmation').find('button').click()

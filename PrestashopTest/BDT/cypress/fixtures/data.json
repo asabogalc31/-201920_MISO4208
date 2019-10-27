@@ -3,7 +3,7 @@
   "product": [
     {
       "basic" : {
-        "name": "Fox Pillow",
+        "name": "Lion Pillow",
         "imagepath":"'../../fixtures/fox_pillow.jpg'",
         "summary":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
         "simpleProduct":true,
@@ -27,7 +27,7 @@
         "summary":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         "simpleProduct":true,
         "reference": "PP-002",
-        "quantity":"1",
+        "quantity":"280",
         "price":"18",
         "includeTaxes":true,
         "category":"Home Accessories"
