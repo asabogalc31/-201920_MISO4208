@@ -1,0 +1,49 @@
+{
+  "url": {
+    "client": "http://172.24.41.140/PrestaShop/es/",
+    "admin": "http://172.24.41.140/PrestaShop/admin-dev"
+  },
+  "menuAccess": {
+    "pMenu": "Accesorios",
+    "pSubm": "Home Accessories"
+  },
+  "amountProducts": 1,
+  "amountItems": 1,
+  "product": {
+    "basic": {
+      "name": "Christmas Pillow",
+      "summary": "Quisque porta volutpat erat.",
+      "simpleProduct": true,
+      "reference": "64679-773",
+      "quantity": 265,
+      "price": 42,
+      "includeTaxes": false
+    },
+    "transport": {
+      "width": 40,
+      "height": 45,
+      "depth": 11,
+      "weight": 25
+    }
+  },
+  "client": {
+    "personalInfo": {
+      "gender": 2,
+      "name": "Lucille",
+      "lastName": "Mac Giolla Pheadair",
+      "email": "lmacgiollapheadair0@va.gov",
+      "password": "SsvbxCSb",
+      "birthday": "29/04/1992",
+      "option": true,
+      "newsletter": false
+    },
+    "addressInfo": {
+      "address": "946 Goodland Point",
+      "complementaryAddress": "Pedra Branca",
+      "postCode": 119197,
+      "city": "Sumberagung",
+      "country": "Brazil",
+      "phoneNumber": "1798197199"
+    }
+  }
+}

@@ -1,36 +1,40 @@
 import { When, Then } from 'cypress-cucumber-preprocessor/steps';
-import data from '../../fixtures/data.json';
-import dataClient from '../../../../E2E/cypress/fixtures/data.json';
+import data from '../../../../Prestashop.Core/fixtures/data.json'
 
 const newProduct = require('../scripts/newProductForm')();
-const core = require('../../../../Prestashop.Core/Core')();
-const product = require('../../../../Prestashop.Core/Product')()
-const cart = require('../../../../Prestashop.Core/Cart')()
+const core = require('../../../../Prestashop.Core/scripts/Core')();
+const product = require('../../../../Prestashop.Core/scripts/Product')()
+const cart = require('../../../../Prestashop.Core/scripts/Cart')()
 
-When(/^I create a new (.*) product$/, (productName) => {
-    var productInfo = data.product.filter(p => p.basic.name === productName)[0];
-
+When(/^I create a new product with status active (.*)$/, (isActive) => {
     cy.get('.title-row')
-    .find('a[class="btn btn-primary  pointer"]')
-    .click();
+        .find('a[class="btn btn-primary  pointer"]')
+        .click();
     
     // Close toolbar
     cy.get('body')
         .find('div[class="sf-toolbar sf-display-none"]')
-        .find('a[class="hide-button"]').click();
+        .find('a[class="hide-button"]')
+        .click();
 
     // Fills basic product info on form
-    newProduct.fillBasicForm(productInfo.basic);
+    var category = data.menuAccess.pSubm ? data.menuAccess.pMenu : data.menuAccess.pSubm;
+    newProduct.fillBasicForm(data.product.basic, category);
 
     // Fills transport info
-    cy.get('#form').find('#form-nav').find('#tab_step4').click();
-    newProduct.fillTransportForm(productInfo.transport);
+    cy.get('#form')
+        .find('#form-nav')
+        .find('#tab_step4')
+        .click();
+    newProduct.fillTransportForm(data.product.transport);
 
     // Activate product
-    cy.get('#form')
-        .find('div[class="product-footer justify-content-md-center"]')
-        .find('div').eq(1)
-        .click();
+    if(JSON.parse(isActive)){
+        cy.get('#form')
+            .find('div[class="product-footer justify-content-md-center"]')
+            .find('div').eq(1)
+            .click();
+    }
         
     // Save button
     cy.get('#form').find('button').contains('Guardar').click();
@@ -41,18 +45,16 @@ When(/^I create a new (.*) product$/, (productName) => {
         .should('contain', 'Configuración actualizada.');
 });
 
-Then(/^I as a client (.*) buy a (.*) product$/, (id, productName) => {   
-    var idClient =  parseInt(id) - 1;
-    var productInfo = data.product.filter(p => p.basic.name === productName)[0];
-
+Then(/^I as a (.*) client want to buy a product$/, (clientType) => {
     // Selects a menu option
-    core.selectMenu(dataClient.menuAccess.pMenu, dataClient.menuAccess.pSubm);
+    core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
             
     // Assert page title
-    (dataClient.menuAccess.pSubm == "" && dataClient.menuAccess.pSubm == null) ? 
-        cy.get('.block-category').find('h1').should('contain', dataClient.menuAccess.pMenu):
-        cy.get('.block-category').find('h1').should('contain', dataClient.menuAccess.pSubm);
+    (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
+        cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
+        cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
 
+    
     // Selects product specified
     cy.get('#header')
         .find('div[class="header-top"]')
@@ -62,11 +64,11 @@ Then(/^I as a client (.*) buy a (.*) product$/, (id, productName) => {
         .find('form')
         .find('input').eq(1)
         .click()
-        .type(productInfo.basic.name)
+        .type(data.product.basic.name)
         .type('{enter}');
 
     product.selectRandomProduct();
-    product.addProductToCart(dataClient.amountItems);
+    product.addProductToCart(data.amountItems);
     
     // Assert modal header
     cy.wait(2000);
@@ -79,22 +81,25 @@ Then(/^I as a client (.*) buy a (.*) product$/, (id, productName) => {
     product.selectModalOption(false);
 
     // Checkout cart
-    cart.checkoutCart(dataClient.amountItems);
-    cart.fillForm(dataClient.products[idClient], true);
+    cart.checkoutCart(data.amountItems);
+    var isGuest = true;
+    if(clientType != "guest"){
+        isGuest = false;
+    }
+    cart.fillForm(data.client, isGuest);
     
     // Assert confirmed order
     cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
 });
 
-Then(/^I delete the (.*) product$/, (productName) => {
-    var productInfo = data.product.filter(p => p.basic.name === productName)[0];
+Then(/^I delete the product$/, () => {
 
     // Filter products by name
     cy.get('#product_catalog_list')
         .find('[name="filter_column_name"]')
         .click()
         .clear()
-        .type(productInfo.basic.name);
+        .type(data.product.basic.name);
     cy.get('#product_catalog_list').find('button[class="btn btn-primary"]').click();
     
     // Select delete option

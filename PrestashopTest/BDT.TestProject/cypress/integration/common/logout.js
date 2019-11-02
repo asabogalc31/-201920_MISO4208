@@ -1,6 +1,4 @@
 import { When } from 'cypress-cucumber-preprocessor/steps';
-import data from '../../fixtures/data.json'
-const core = require('../../../../Prestashop.Core/Core')()
 
 When(/^I log out from admin site$/, () => {
     // Shows menu

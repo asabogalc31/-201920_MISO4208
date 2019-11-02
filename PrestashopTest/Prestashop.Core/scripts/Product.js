@@ -6,7 +6,6 @@ module.exports = function() {
         cy.get('.pagination').find('div').then(($listItem) => {
             // Generate a random index of elements
             var txtTotalProducts = $listItem.text().match(/\s\d{1}\s/).toString().trim();
-            console.log(txtTotalProducts);
             var randomNumber = Math.floor(Math.random() * txtTotalProducts);
             
             // Item is selected

@@ -68,15 +68,15 @@ module.exports = function() {
 
    /**
     * Fills the form
-    * @param {*} cartInfo The information to fills the form
+    * @param {*} client Client information to fills the form
     * @param {*} isGuest True if is a guest. False otherwise.
     */
-    function fillForm(cartInfo, isGuest){
+    function fillForm(client, isGuest){
         // Fill personal information form
-        personalForm(cartInfo.personalInfo, isGuest);
+        personalForm(client.personalInfo, isGuest);
 
         // Fill addresses form
-        addresessForm(cartInfo.addressInfo, isGuest);
+        addresessForm(client.addressInfo, isGuest);
 
         // Fill submission form
         submissionForm();

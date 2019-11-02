@@ -1,15 +1,17 @@
 /**
  * Import scripts
  */
-const core = require('../../../Prestashop.Core/Core')()
-const product = require('../../../Prestashop.Core/Product')()
-const cart = require('../../../Prestashop.Core/Cart')()
+const core = require('../../../Prestashop.Core/scripts/Core')()
+const product = require('../../../Prestashop.Core/scripts/Product')()
+const cart = require('../../../Prestashop.Core/scripts/Cart')()
+const dataGeneration = require('../../../Prestashop.Core/scripts/Data')()
 
-import data from '../fixtures/data.json'
+import data from '../../../../Prestashop.Core/fixtures/data.json'
 
 context('As an user I want to buy an item on the prestashop site', function() {
 	beforeEach(function() {
-		core.openSite(data.url);
+        dataGeneration.generateData();
+		core.openSite(data.url.client);
     })
     
     describe('Shopping cart - Guest user visits prestashop', function() {
@@ -37,10 +39,11 @@ context('As an user I want to buy an item on the prestashop site', function() {
 
             // Checkout cart
             cart.checkoutCart(data.amountItems);
-            cart.fillForm(data.products[0], true);
+            cart.fillForm(data.client, true);
             
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
+            
         }),
        
         it('Creates an account and buys various items successfully', function() {
@@ -75,7 +78,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             
             // Checkout cart
             cart.checkoutCart();
-            cart.fillForm(data.products[1], true);
+            cart.fillForm(data.client, true);
 
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
@@ -107,7 +110,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
 
             // Checkout cart
             cart.checkoutCart(data.amountItems);
-            cart.fillForm(data.products[0], false);
+            cart.fillForm(data.client, false);
             
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
@@ -145,7 +148,7 @@ context('As an user I want to buy an item on the prestashop site', function() {
             
             // Checkout cart
             cart.checkoutCart(data.amountItems);
-            cart.fillForm(data.products[0], false);
+            cart.fillForm(data.client, false);
 
             // Assert confirmed order
             cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');

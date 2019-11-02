@@ -5,7 +5,7 @@ module.exports = function() {
      * Fills the basic product information on the form with the information of product specified
      * @param {Object} product 
      */
-    function fillBasicForm(product) {
+    function fillBasicForm(product, category) {
         cy.get(form).find('#form_step1_name_1').click().type(product.name); //Name
 
         //Summary
@@ -26,7 +26,7 @@ module.exports = function() {
         selectTaxes(product.includeTaxes)
 
         // Select category
-        selectCategory(product.category);
+        selectCategory(category);
     }
 
     /**
