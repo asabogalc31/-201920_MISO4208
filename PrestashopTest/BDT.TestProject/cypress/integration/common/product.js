@@ -6,7 +6,7 @@ const core = require('../../../../Prestashop.Core/scripts/Core')();
 const product = require('../../../../Prestashop.Core/scripts/Product')()
 const cart = require('../../../../Prestashop.Core/scripts/Cart')()
 
-When(/^I create a new product with status active (.*)$/, (isActive) => {
+When(/^I create a new product with status active (.*) with the input data of position (.*)$/, (isActive, dataObject) => {
     cy.get('.title-row')
         .find('a[class="btn btn-primary  pointer"]')
         .click();
@@ -18,15 +18,15 @@ When(/^I create a new product with status active (.*)$/, (isActive) => {
         .click();
 
     // Fills basic product info on form
-    var category = data.menuAccess.pSubm ? data.menuAccess.pMenu : data.menuAccess.pSubm;
-    newProduct.fillBasicForm(data.product.basic, category);
+    var category = data[dataObject].menuAccess.pSubm ? data[dataObject].menuAccess.pMenu : data[dataObject].menuAccess.pSubm;
+    newProduct.fillBasicForm(data[dataObject].product.basic, category);
 
     // Fills transport info
     cy.get('#form')
         .find('#form-nav')
         .find('#tab_step4')
         .click();
-    newProduct.fillTransportForm(data.product.transport);
+    newProduct.fillTransportForm(data[dataObject].product.transport);
 
     // Activate product
     if(JSON.parse(isActive)){
@@ -45,14 +45,14 @@ When(/^I create a new product with status active (.*)$/, (isActive) => {
         .should('contain', 'Configuración actualizada.');
 });
 
-Then(/^I as a (.*) client want to buy a product$/, (clientType) => {
+Then(/^I as a (.*) client want to buy a product with the input data of position (.*)$/, (clientType, dataObject) => {
     // Selects a menu option
-    core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
+    core.selectMenu(data[dataObject].menuAccess.pMenu, data[dataObject].menuAccess.pSubm);
             
     // Assert page title
-    (data.menuAccess.pSubm == "" && data.menuAccess.pSubm == null) ? 
-        cy.get('.block-category').find('h1').should('contain', data.menuAccess.pMenu):
-        cy.get('.block-category').find('h1').should('contain', data.menuAccess.pSubm);
+    (data[dataObject].menuAccess.pSubm == "" && data[dataObject].menuAccess.pSubm == null) ? 
+        cy.get('.block-category').find('h1').should('contain', data[dataObject].menuAccess.pMenu):
+        cy.get('.block-category').find('h1').should('contain', data[dataObject].menuAccess.pSubm);
 
     
     // Selects product specified
@@ -64,11 +64,11 @@ Then(/^I as a (.*) client want to buy a product$/, (clientType) => {
         .find('form')
         .find('input').eq(1)
         .click()
-        .type(data.product.basic.name)
+        .type(data[dataObject].product.basic.name)
         .type('{enter}');
 
     product.selectRandomProduct();
-    product.addProductToCart(data.amountItems);
+    product.addProductToCart(data[dataObject].amountItems);
     
     // Assert modal header
     cy.wait(2000);
@@ -81,25 +81,25 @@ Then(/^I as a (.*) client want to buy a product$/, (clientType) => {
     product.selectModalOption(false);
 
     // Checkout cart
-    cart.checkoutCart(data.amountItems);
+    cart.checkoutCart(data[dataObject].amountItems);
     var isGuest = true;
     if(clientType != "guest"){
         isGuest = false;
     }
-    cart.fillForm(data.client, isGuest);
+    cart.fillForm(data[dataObject].client, isGuest);
     
     // Assert confirmed order
     cy.get('#content-hook_order_confirmation').find('h3').should('contain', 'Su pedido está confirmado');
 });
 
-Then(/^I delete the product$/, () => {
+Then(/^I delete the product with the input data of position (.*)$/, (dataObject) => {
 
     // Filter products by name
     cy.get('#product_catalog_list')
         .find('[name="filter_column_name"]')
         .click()
         .clear()
-        .type(data.product.basic.name);
+        .type(data[dataObject].product.basic.name);
     cy.get('#product_catalog_list').find('button[class="btn btn-primary"]').click();
     
     // Select delete option

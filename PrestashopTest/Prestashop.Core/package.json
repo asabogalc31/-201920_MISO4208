@@ -4,7 +4,6 @@
   "description": "",
   "main": "",
   "dependencies": {
-    "mockaroo": "^0.1.7"
   },
   "devDependencies": {},
   "scripts": {

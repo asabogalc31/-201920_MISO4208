@@ -4,16 +4,10 @@
 const core = require('../../../Prestashop.Core/scripts/Core')()
 const product = require('../../../Prestashop.Core/scripts/Product')()
 const cart = require('../../../Prestashop.Core/scripts/Cart')()
-const dataGeneration = require('../../../Prestashop.Core/scripts/Data')()
 
 import data from '../../../../Prestashop.Core/fixtures/data.json'
 
-context('As an user I want to buy an item on the prestashop site', function() {
-	beforeEach(function() {
-        dataGeneration.generateData();
-		core.openSite(data.url.client);
-    })
-    
+context('As an user I want to buy an item on the prestashop site', function() {    
     describe('Shopping cart - Guest user visits prestashop', function() {
         it('Creates an account and buys an item successfully', function() {               
             // Selects a menu option
