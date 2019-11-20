@@ -9,18 +9,18 @@ module.exports = function() {
         cy.get(form).find('#form_step1_name_1').click().type(product.name); //Name
 
         //Summary
-        cy.get('#form_step1_description_short_1_ifr').then(function($iframe){
-            var body = $iframe.contents().find("body");            
-            cy.get(body).find('p').click().type(product.summary);
-        });
+        /*cy.get('#form_step1_description_short_1_ifr').then(function($iframe){
+            var body = $iframe.contents().find('body');            
+            cy.get(body).find('p').click({force:true}).type(product.summary);
+        });*/
 
         // Combinations
         var combinations = cy.get(form).find("#show_variations_selector").find('div');
-        product.simpleProduct ? combinations.eq(0).click() : combinations.eq(1).click();
+        product.simpleProduct ? combinations.eq(0).click({force:true}) : combinations.eq(1).click({force:true});
         
-        cy.get(form).find('#form_step6_reference').click().type(product.reference); //Reference        
-        cy.get(form).find('#form_step1_qty_0_shortcut').click().type(product.quantity); //Quantity
-        cy.get(form).find('#form_step1_price_shortcut').clear().type(product.price).type('{enter}'); // Price
+        cy.get(form).find('#form_step6_reference').click({force:true}).type(product.reference); //Reference        
+        cy.get(form).find('#form_step1_qty_0_shortcut').click({force:true}).type(product.quantity); //Quantity
+        cy.get(form).find('#form_step1_price_shortcut').clear({force:true}).type(product.price).type('{enter}'); // Price
         
         // Select taxes option
         selectTaxes(product.includeTaxes)

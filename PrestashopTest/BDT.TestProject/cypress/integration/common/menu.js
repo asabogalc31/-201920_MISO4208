@@ -2,15 +2,17 @@ import { When, Then } from 'cypress-cucumber-preprocessor/steps';
 
 When(/^I select (.*) menu option and (.*) submenu option$/, (menu, submenu) => {
     // Shows menu
+    cy.wait(2000);
     cy.get("#header").find('i[class="material-icons js-mobile-menu"]').click();
 
     // Selects menu option
+    cy.wait(2000);
     var menuElement = cy.get('.main-menu')
             .find('li[class="link-levelone has_submenu"]')
 			.find('span')
             .contains(menu);
             
-    menuElement.click();
+    menuElement.click({force:true});
 
     // Selects submenu option
     var subMenuElement = menuElement
@@ -21,7 +23,7 @@ When(/^I select (.*) menu option and (.*) submenu option$/, (menu, submenu) => {
             .find('a')
             .contains(submenu);
 
-    subMenuElement.click();
+    subMenuElement.click({force:true});
 });
 
 Then(/^I select (.*) menu option and (.*) submenu option$/, (menu, submenu) => {
