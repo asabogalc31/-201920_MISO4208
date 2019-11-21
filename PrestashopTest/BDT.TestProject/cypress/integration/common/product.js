@@ -35,7 +35,8 @@ When(/^I create a new product with status active (.*) with the input data of pos
             .find('div').eq(1)
             .click();
     }
-        
+    
+    cy.screenshot('CreateNewProduct');
     // Save button
     cy.get('#form').find('button').contains('Guardar').click();
 
@@ -69,7 +70,7 @@ Then(/^I as a (.*) client want to buy a product with the input data of position 
 
     product.selectRandomProduct();
     product.addProductToCart(data[dataObject].amountItems);
-    
+
     // Assert modal header
     cy.wait(2000);
     cy.get('.modal-content')
@@ -93,7 +94,6 @@ Then(/^I as a (.*) client want to buy a product with the input data of position 
 });
 
 Then(/^I delete the product with the input data of position (.*)$/, (dataObject) => {
-
     // Filter products by name
     cy.get('#product_catalog_list')
         .find('[name="filter_column_name"]')
@@ -114,6 +114,8 @@ Then(/^I delete the product with the input data of position (.*)$/, (dataObject)
         .find('a')
         .find('i')
         .contains('delete').click();
+    
+    cy.screenshot('DeleteProduct');
     
     // Accept delete products
     cy.get('#catalog_deletion_modal')

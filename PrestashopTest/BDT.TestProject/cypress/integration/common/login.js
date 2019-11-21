@@ -8,6 +8,7 @@ Given(/^I go to prestashop admin site with the input data of position (.*)$/, (d
 
 Given(/^I log in with user (.*) and password (.*)$/, (user, password) => {
   core.LogInAsAdminUser(user, password);
+  cy.screenshot('LoginAsUser');
 });
 
 Then(/^I go to prestashop admin site with the input data of position (.*)$/, (dataObject) => {
@@ -16,4 +17,5 @@ Then(/^I go to prestashop admin site with the input data of position (.*)$/, (da
 
 Then(/^I log in with user (.*) and password (.*)$/, (user, password) => {
   core.LogInAsAdminUser(user, password);
+  cy.screenshot('LoginAsAdmin');
 });

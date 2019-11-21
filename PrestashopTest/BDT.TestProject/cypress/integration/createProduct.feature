@@ -15,7 +15,7 @@ Feature: Create a new product
 
     Examples:
     |DataId|
-    |{0}|
+    |74|
 
     Scenario Outline: Create an success simple product with status activated to a registered client
     Given I go to prestashop admin site with the input data of position <DataId>
@@ -34,4 +34,4 @@ Feature: Create a new product
 	
     Examples:
     |DataId|
-    |{0}|
+    |75|

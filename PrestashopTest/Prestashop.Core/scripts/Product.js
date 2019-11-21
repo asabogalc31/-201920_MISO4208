@@ -14,6 +14,7 @@ module.exports = function() {
                 .children()
                 .eq(randomNumber)
                 .click();
+            cy.screenshot('selectRandomProduct');
         })
     }
     
@@ -38,6 +39,8 @@ module.exports = function() {
             })
             return;
         }
+        
+        cy.screenshot('addProductToCart');
 
         // Adds product to shopping cart
         var children = cy.get('.product-information').children().its('length').then(numberElements =>{
@@ -55,7 +58,7 @@ module.exports = function() {
                 .then(($button) => {                
                     cy.get($button).click();
                 })
-        });        
+        });
     }
 
     /**

@@ -52,6 +52,8 @@ module.exports = function() {
             expect(totalExpected).to.equal(parseFloat(totalSite));
         })
 
+        cy.screenshot('checkoutCart');
+
         // Does click on checkout cart button
         cy.get(cartSummaryElement)
         .find('.text-sm-center')
@@ -64,6 +66,7 @@ module.exports = function() {
      */
     function removeProduct(){
         cy.get('.cart-items').find('a.remove-from-cart').click({multiple: true});
+        cy.screenshot('removeProduct');        
     }
 
    /**
@@ -125,6 +128,7 @@ module.exports = function() {
         
         cy.get(formId).find('input[name="email"]').click().type(personalInfo.email);
         cy.get(formId).find('input[name="password"]').click().type(personalInfo.password);
+        cy.screenshot('fillPersonalForm');        
         cy.get(formId).find('button.continue').click();
     }
     
@@ -143,6 +147,7 @@ module.exports = function() {
             cy.get(formId).find('input[name="city"]').click().type(addressInfo.city);
         }
 
+        cy.screenshot('fillAddresessForm');        
         cy.get(formId).find('button.continue').click()
     }
     
@@ -164,6 +169,7 @@ module.exports = function() {
             .click();
         });
 
+        cy.screenshot('fillSubmissionForm');        
         cy.get(formId).find('button.continue').click()
     }
     
@@ -177,6 +183,7 @@ module.exports = function() {
         // TODO: Permitir la selección del tipo de pago a través de parámetro pasado por el usuario
         cy.get(formId).find('#payment-option-2').click()
         cy.get(formId).find('input[name="conditions_to_approve[terms-and-conditions]"]').click()
+        cy.screenshot('fillPaymentForm');        
         cy.get(formId).find('#payment-confirmation').find('button').click()
     }    
 

@@ -9,4 +9,6 @@ When(/^I log out from admin site$/, () => {
     .find('li[class="link-levelone"]')
     .find('a[id="header_logout"]')
     .click();
+
+    cy.screenshot('Logout');
 });
