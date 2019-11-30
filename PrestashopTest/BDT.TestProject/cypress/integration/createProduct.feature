@@ -34,4 +34,4 @@ Feature: Create a new product
 	
     Examples:
     |DataId|
-    |{0}}|
+    |{0}|

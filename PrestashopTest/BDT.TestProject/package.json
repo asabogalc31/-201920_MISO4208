@@ -11,7 +11,7 @@
     "cypress-cucumber-preprocessor": "^1.16.2"
   },
   "scripts": {
-    "test": "cypress run --spec 'cypress/integration/**/*.feature' --record --key f1d185c7-07c4-4cba-9aaf-eb39a4c99c4a"
+    "test": "cypress run --spec 'cypress/integration/**/*.feature' --record --key {0}"
   },
   "author": "Vulkano",
   "license": "ISC",
