@@ -5,11 +5,20 @@ const core = require('../../../Prestashop.Core/scripts/Core')()
 const product = require('../../../Prestashop.Core/scripts/Product')()
 const cart = require('../../../Prestashop.Core/scripts/Cart')()
 
-import data from '../../../../Prestashop.Core/fixtures/data.json'
+import jsonFile from '../../../Prestashop.Core/fixtures/data.json'
+
+var data = "";
 
 context('As an user I want to buy an item on the prestashop site', function() {    
+    beforeEach(function () {   
+        var rndItem = Math.floor(Math.random() * jsonFile.length);  
+        data = jsonFile[rndItem];
+
+        core.openSite(data.url.client)
+    })
+
     describe('Shopping cart - Guest user visits prestashop', function() {
-        it('Creates an account and buys an item successfully', function() {               
+        it('Creates an account and buys an item successfully', function() {
             // Selects a menu option
             core.selectMenu(data.menuAccess.pMenu, data.menuAccess.pSubm);
             

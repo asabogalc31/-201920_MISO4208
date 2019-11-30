@@ -1,1 +1,4 @@
-{}
+{
+    "testFiles": "**/*.js",
+    "projectId": "bggay5"
+}
